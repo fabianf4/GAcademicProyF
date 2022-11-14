@@ -26,7 +26,6 @@ export function BodyEditActivity({ activity, setLoad, setEdit }) {
             .then((results) => {
                 setLoad(true)
                 setEdit("0")
-                console.log(results.data)
             })
             .catch((e) => {
                 console.log(e)
