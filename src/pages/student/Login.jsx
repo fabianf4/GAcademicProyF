@@ -24,6 +24,7 @@ export function Login({ actualizar }) {
                 actualizar(true)
             })
             .catch((error) => {
+                Swal.fire("Error", "Usuario y/o contraseña incorrecta", "error")
                 console.log(error)
             })
     }

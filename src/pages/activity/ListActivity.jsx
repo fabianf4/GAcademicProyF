@@ -17,6 +17,8 @@ export function ListActivity({ idMatter }) {
     const [edit, setEdit] = useState(false)
     const [recent, setRecent] = useState(false)
     const [complete, setComplete] = useState("0")
+    const [notaActual, setNotaActual] = useState(0)
+    const [notaFaltante, setNotaFaltante] = useState(0)
 
     useEffect(() => {
         if (idMatter && loadId) {
@@ -33,8 +35,6 @@ export function ListActivity({ idMatter }) {
                 })
                 setComplete(count)
             })
-
-        
         }
     }, [loadId])
 
@@ -54,11 +54,37 @@ export function ListActivity({ idMatter }) {
         }
     }, [recent])
 
+    useEffect(() => {
+        let aux1 = 0
+        let aux2 = 0
+
+        activities?.forEach((activity) => {
+            if (activity?.score) {
+                aux1 += (activity?.score * activity?.percentage) / 100   
+                aux2 += activity?.percentage            
+            }
+        })
+        setNotaActual(aux1)
+        if((100-aux2)==0){
+            setNotaFaltante("Ya finalizo todas las actividades de la materia")
+        }else{
+            setNotaFaltante((30-aux1)/((100-aux2)/100))
+        }
+    }, [activities])
+
     return (
         <>
             <Container>
-                <h4>Avance:</h4>
-                <ProgressBar bgcolor="#99ccff" progress={complete} height={10} />
+                <Row>
+                    <h5>Nota actual: {notaActual}</h5>
+                    <h5>Nota para aprobar: {notaFaltante}</h5>
+                    <h5>Avance:</h5>
+                </Row>
+                <ProgressBar
+                    bgcolor="#99ccff"
+                    progress={complete}
+                    height={10}
+                />
             </Container>
             <Row className="justify-content-md-center">
                 {activities.map((activity) => (
@@ -67,7 +93,7 @@ export function ListActivity({ idMatter }) {
                         title={`${activity.description}`}
                         subtitle={`Valor: ${activity.percentage}%`}
                         body={
-                            !(edit==activity._id)? (
+                            !(edit == activity._id) ? (
                                 <BodyActivity
                                     activity={activity}
                                     setEdit={setEdit}

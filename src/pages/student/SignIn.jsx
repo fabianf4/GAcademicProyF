@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Form, Button } from "react-bootstrap"
 import { connectionApi } from "../../api/axiosModel"
+import Swal from "sweetalert2"
 
 export function SignIn() {
     const [name, setName] = useState("")
@@ -19,6 +20,7 @@ export function SignIn() {
                 password
             })
             .then((response) => {
+                Swal.fire("Exito", "Se a registrado", "success")
                 setName("")
                 setLastname("")
                 setUsername("")
@@ -26,6 +28,7 @@ export function SignIn() {
                 console.log(response)
             })
             .catch((error) => {
+                Swal.fire("Error", "Ocurrio un error creando el usuario", "error")
                 console.log(error)
             })
     }
